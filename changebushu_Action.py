@@ -24,7 +24,11 @@ def login(user, password):
         "token": "access"
     }
     r1 = requests.post(url1, data=data1, headers=headers, allow_redirects=False)
-    location = r1.headers["Location"]
+    location = r1.headers.get("Location")
+    if not location:
+        print(f"未获取到登录令牌，HTTP 状态码：{r1.status_code}")
+        return 0, 0
+
     try:
         code = get_code(location)
     except:
